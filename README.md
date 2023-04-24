@@ -2,8 +2,8 @@
 
 ### 기능요구사항
 ### Input
-- [ ] 로또 구입 금액 입력 한다. (Input#enterAmount)
-- [ ] 지난 주 당첨 번호를 입력 한다. (Input#enterLastWeekLotto)
+- [x] 로또 구입 금액 입력 한다. (Input#enterAmount)
+- [x] 지난 주 당첨 번호를 입력 한다. (Input#enterLastWeekLotto)
 
 ### Output
 - [ ] 구입한 로또의 수량을 출력한다. (Output#printLottoCount)
@@ -12,8 +12,9 @@
 - [ ] 총 수익률을 출력한다. (Output#printProfit)
 
 ### Amount
-- [ ] 로또 한장의 금액은 천원이다. (Amount.lottoOneAmount)
-- [ ] 구매 가능한 로또의 개수를 알려준다. (Amount#informLottoCount)
+- [x] 로또 한장의 금액은 천원이다. (Amount.lottoOneAmount)
+- [x] 구매 가능한 로또의 개수를 알려준다. (Amount#informLottoCount)
+- [ ] 
 
 ### LottoPaper
 - [ ] 수량 만큼 로또를 생성한다. (LottoPaper#createLotto)
