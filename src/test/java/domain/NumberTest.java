@@ -25,4 +25,14 @@ class NumberTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    @DisplayName("숫자 비교")
+    void compare() {
+        // given
+
+        // when
+
+        // then
+        assertThat(new Number(1)).isNotEqualTo(new Number(1));
+    }
 }
