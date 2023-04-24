@@ -22,8 +22,8 @@
 - [x] 로또는 1~45의 숫자이다. (Number#validateBound)
 
 ### Lotto
-- [ ] 로또는 중복되지 않은 6개의 숫자로 구성되어 있다. (Lotto.consistsNumbers)
-- [ ] 로또는 6개의 숫자를 무작위로 생성된다. (Lotto#createLottoNumber)
+- [x] 로또는 중복되지 않은 6개의 숫자로 구성되어 있다. 
+- [x] 로또는 6개의 숫자로 생성된다. (Lotto#createLottoNumber)
 
 ### Statistics
 - [ ] 3~6개 까지의 일치하는 로또의 수를 찾는다. (Statistics#findMatchingLottoNumber)
