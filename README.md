@@ -14,13 +14,12 @@
 ### Amount
 - [x] 로또 한장의 금액은 천원이다. (Amount.lottoOneAmount)
 - [x] 구매 가능한 로또의 개수를 알려준다. (Amount#informLottoCount)
-- [ ] 
 
 ### LottoPaper
 - [ ] 수량 만큼 로또를 생성한다. (LottoPaper#createLotto)
 
 ### Number
-- [ ] 로또의 1~45의 숫자이다. (Number#validateBound)
+- [x] 로또는 1~45의 숫자이다. (Number#validateBound)
 
 ### Lotto
 - [ ] 로또는 중복되지 않은 6개의 숫자로 구성되어 있다. (Lotto.consistsNumbers)
