@@ -25,7 +25,6 @@ public class Lotto {
         }
         Collections.shuffle(preparedLottoNumbers);
 
-        return List.of(new Number(1), new Number(2), new Number(2), new Number(2), new Number(2),
-            new Number(2));
+        return preparedLottoNumbers.subList(0, 6);
     }
 }
