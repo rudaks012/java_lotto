@@ -6,18 +6,13 @@ import java.util.List;
 
 public class Lotto {
 
-    public List<Integer> createLottoNumber() {
-        List<Integer> preparedLottoNumbers = new ArrayList<>();
+    private List<Number> lottoNumbers;
 
-        for (int i = 1; i <= 45; i++) {
-            preparedLottoNumbers.add(i);
-        }
-        Collections.shuffle(preparedLottoNumbers);
-
-        return preparedLottoNumbers.subList(0, 6);
+    public Lotto() {
+        this.lottoNumbers = createLottoNumber();
     }
 
-    public List<Number> createLottoNumber2() {
+    public List<Number> createLottoNumber() {
         List<Number> preparedLottoNumbers = new ArrayList<>();
 
         for (int i = 1; i <= 45; i++) {
@@ -26,5 +21,9 @@ public class Lotto {
         Collections.shuffle(preparedLottoNumbers);
 
         return preparedLottoNumbers.subList(0, 6);
+    }
+
+    public int size() {
+        return lottoNumbers.size();
     }
 }

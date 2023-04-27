@@ -33,6 +33,6 @@ class NumberTest {
         // when
 
         // then
-        assertThat(new Number(1)).isNotEqualTo(new Number(1));
+        assertThat(new Number(1)).isEqualTo(new Number(1));
     }
 }

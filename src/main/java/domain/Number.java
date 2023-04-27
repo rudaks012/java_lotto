@@ -7,7 +7,7 @@ public class Number {
     private static final int MIN = 1;
     private static final int MAX = 45;
 
-    private int number = 0;
+    private int number;
 
     public Number(int number) {
         if (validateBound(number)) {
