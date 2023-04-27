@@ -12,7 +12,7 @@ public class Lotto {
         this.lottoNumbers = createLottoNumber();
     }
 
-    public List<Number> createLottoNumber() {
+    private List<Number> createLottoNumber() {
         List<Number> preparedLottoNumbers = new ArrayList<>();
 
         for (int i = 1; i <= 45; i++) {
