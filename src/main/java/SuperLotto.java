@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class SuperLotto {
 
@@ -79,11 +81,11 @@ public class SuperLotto {
     }
 
     private static List<Integer> getStringToIntegerList(List<String> lottoList) {
-        List<Integer> lastLottoNumberList = new ArrayList<>();
-        for (String number : lottoList) {
-            lastLottoNumberList.add(Integer.parseInt(number.trim()));
-        }
-        return lastLottoNumberList;
+
+        return  lottoList.stream()
+                         .mapToInt(Integer::parseInt)
+                         .boxed()
+                         .collect(Collectors.toList());
     }
 
     private static void shuffleLottos(int lottoCount, List<List<Integer>> lottos) {
@@ -99,9 +101,8 @@ public class SuperLotto {
     }
 
     private static void createLotto(List<Integer> preparedLottoNumbers) {
-        for (int j = 1; j <= 45; j++) {
-            preparedLottoNumbers.add(j);
-        }
+        IntStream.rangeClosed(1, 45)
+                 .forEach(preparedLottoNumbers::add);
     }
 
 
