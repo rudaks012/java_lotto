@@ -3,7 +3,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class SuperLotto {
 
@@ -38,7 +37,7 @@ public class SuperLotto {
 
         for (List<Integer> lotto : lottos) {
 
-            getCount(lastLottoNumberList, count, lotto);
+            count = getCount(lastLottoNumberList, count, lotto);
 
             if (count == 3) {
                 matchThreeLottoNumer++;
@@ -66,26 +65,28 @@ public class SuperLotto {
 
     }
 
-    private static void getCount(List<Integer> lastLottoNumberList, int count, List<Integer> lotto) {
+    private static int getCount(List<Integer> lastLottoNumberList, int count, List<Integer> lotto) {
         for (Integer lottoNumber : lotto) {
-            LottoMatchingCount(lastLottoNumberList, count, lottoNumber);
+           count = LottoMatchingCount(lastLottoNumberList, count, lottoNumber);
         }
+        return count;
     }
 
-    private static void LottoMatchingCount(List<Integer> lastLottoNumberList, int count, Integer lottoNumber) {
+    private static int LottoMatchingCount(List<Integer> lastLottoNumberList, int count, Integer lottoNumber) {
         for (Integer lastLottoNumber : lastLottoNumberList) {
             if (lottoNumber.equals(lastLottoNumber)) {
                 count++;
             }
         }
+        return count;
     }
 
     private static List<Integer> getStringToIntegerList(List<String> lottoList) {
-
-        return  lottoList.stream()
-                         .mapToInt(Integer::parseInt)
-                         .boxed()
-                         .collect(Collectors.toList());
+        List<Integer> lastLottoNumberList = new ArrayList<>();
+        for (String number : lottoList) {
+            lastLottoNumberList.add(Integer.parseInt(number.trim()));
+        }
+        return lastLottoNumberList;
     }
 
     private static void shuffleLottos(int lottoCount, List<List<Integer>> lottos) {
@@ -101,8 +102,9 @@ public class SuperLotto {
     }
 
     private static void createLotto(List<Integer> preparedLottoNumbers) {
-        IntStream.rangeClosed(1, 45)
-                 .forEach(preparedLottoNumbers::add);
+        for (int j = 1; j <= 45; j++) {
+            preparedLottoNumbers.add(j);
+        }
     }
 
 
