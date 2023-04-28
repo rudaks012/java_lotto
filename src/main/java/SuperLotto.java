@@ -51,6 +51,8 @@ public class SuperLotto {
             count = 0;
         }
 
+        // 로또 당첨 통계
+
         System.out.println("당첨 통계");
         System.out.println("---------");
         System.out.println("3개 일치 (5000원)- " + matchThreeLottoNumer + "개");
