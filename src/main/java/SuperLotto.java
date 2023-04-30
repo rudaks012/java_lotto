@@ -1,4 +1,9 @@
+import domain.DefaultLottoGenerator;
+import domain.LottoGenerator;
+import domain.LottoMatcher;
+import domain.LottoStatistics;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
@@ -16,62 +21,60 @@ public class SuperLotto {
 
         System.out.println(lottoCount + "개를 구매");
 
-        List<List<Integer>> lottos = new ArrayList<>();
+        List<List<Integer>> lottos = generateLottos(lottoCount, new DefaultLottoGenerator());
 
-        shuffleLottos(lottoCount, lottos);
         System.out.println("lottos = " + lottos);
+        System.out.println("지난 주 로또 번호를 입력하세요(쉼표로 구분):");
+        scanner.nextLine();
+        String lastWeekLottoNumber = scanner.nextLine();
 
-        Scanner inputLastWeek = new Scanner(System.in);
+        List<Integer> lastLottoNumbers = parseLottoNumbers(lastWeekLottoNumber);
+        LottoStatistics statistics = calculateLottoStatistics(lottos, lastLottoNumbers);
 
-        String lastWeekLottoNumber = inputLastWeek.nextLine();
-        String[] splitLottoNumbers = lastWeekLottoNumber.split(",");
-
-        List<String> lottoList = List.of(splitLottoNumbers);
-        List<Integer> lastLottoNumberList = getStringToIntegerList(lottoList);
-
-        int matchThreeLottoNumer = 0;
-        int matchFourLottoNumber = 0;
-        int matchFiveLottoNumber = 0;
-        int matchSixLottoNumber = 0;
-        int count = 0;
-
-        for (List<Integer> lotto : lottos) {
-
-            count = getCount(lastLottoNumberList, count, lotto);
-
-            if (count == 3) {
-                matchThreeLottoNumer++;
-            } else if (count == 4) {
-                matchFourLottoNumber++;
-            } else if (count == 5) {
-                matchFiveLottoNumber++;
-            } else if (count == 6) {
-                matchSixLottoNumber++;
-            }
-            count = 0;
-        }
-
-        // 로또 당첨 통계
-
-        System.out.println("당첨 통계");
-        System.out.println("---------");
-        System.out.println("3개 일치 (5000원)- " + matchThreeLottoNumer + "개");
-        System.out.println("4개 일치 (50000원)- " + matchFourLottoNumber + "개");
-        System.out.println("5개 일치 (1500000원)-" + matchFiveLottoNumber + "개");
-        System.out.println("6개 일치 (2000000000원)-" + matchSixLottoNumber + "개");
-
-        double profit = getProfit(money, matchThreeLottoNumer, matchFourLottoNumber, matchFiveLottoNumber, matchSixLottoNumber);
-        String StringProfit = String.format("%.2f", profit);
-
-        System.out.println("총 수익률은" + StringProfit + "입니다.(기준이 1이기 때문에 결과적으로 손해라는 의미임)");
+        printLottoStatistics(statistics, money);
 
     }
 
-    private static int getCount(List<Integer> lastLottoNumberList, int count, List<Integer> lotto) {
-        for (Integer lottoNumber : lotto) {
-           count = LottoMatchingCount(lastLottoNumberList, count, lottoNumber);
+    private static void printLottoStatistics(LottoStatistics statistics, int money) {
+        System.out.println("당첨 통계");
+        System.out.println("---------");
+        System.out.println("3개 일치 (5000원)- " + statistics.getMatchThree() + "개");
+        System.out.println("4개 일치 (50000원)- " + statistics.getMatchFour() + "개");
+        System.out.println("5개 일치 (1500000원)-" + statistics.getMatchFive() + "개");
+        System.out.println("6개 일치 (2000000000원)-" + statistics.getMatchSix() + "개");
+
+        double profitRate = statistics.calculateProfitRate(money);
+        String formatProfitRate = String.format("%.2f", profitRate);
+        System.out.println("총 수익률은" + formatProfitRate + "입니다.(기준이 1이기 때문에 결과적으로 손해라는 의미임)");
+    }
+
+    private static LottoStatistics calculateLottoStatistics(List<List<Integer>> lottos, List<Integer> lastLottoNumbers) {
+        LottoStatistics statistics = new LottoStatistics();
+        LottoMatcher matcher = new LottoMatcher();
+
+        for (List<Integer> lotto : lottos) {
+            int matchCount = matcher.getMatchingCount(lastLottoNumbers, lotto);
+            statistics.incrementMatchCount(matchCount);
         }
-        return count;
+        return statistics;
+    }
+
+    private static List<Integer> parseLottoNumbers(String lastWeekLottoNumber) {
+        String[] splitLottoNumbers = lastWeekLottoNumber.split(",");
+        return Arrays.stream(splitLottoNumbers)
+                     .map(String::trim)
+                     .mapToInt(Integer::parseInt)
+                     .boxed()
+                     .collect(Collectors.toList());
+    }
+
+    private static List<List<Integer>> generateLottos(int lottoCount, LottoGenerator generator) {
+        List<List<Integer>> lottos = new ArrayList<>();
+        for (int i = 0; i < lottoCount; i++) {
+            List<Integer> lotto = generator.generateLotto();
+            lottos.add(lotto);
+        }
+        return lottos;
     }
 
     private static int LottoMatchingCount(List<Integer> lastLottoNumberList, int count, Integer lottoNumber) {
@@ -82,37 +85,4 @@ public class SuperLotto {
         }
         return count;
     }
-
-    private static List<Integer> getStringToIntegerList(List<String> lottoList) {
-        List<Integer> lastLottoNumberList = new ArrayList<>();
-        for (String number : lottoList) {
-            lastLottoNumberList.add(Integer.parseInt(number.trim()));
-        }
-        return lastLottoNumberList;
-    }
-
-    private static void shuffleLottos(int lottoCount, List<List<Integer>> lottos) {
-        for (int i = 0; i < lottoCount; i++) {
-            List<Integer> preparedLottoNumbers = new ArrayList<>();
-
-            createLotto(preparedLottoNumbers);
-            Collections.shuffle(preparedLottoNumbers);
-
-            List<Integer> lotto = preparedLottoNumbers.subList(0, 6);
-            lottos.add(lotto);
-        }
-    }
-
-    private static void createLotto(List<Integer> preparedLottoNumbers) {
-        for (int j = 1; j <= 45; j++) {
-            preparedLottoNumbers.add(j);
-        }
-    }
-
-
-
-    private static double getProfit(int money, int matchThree, int matchFour, int matchFive, int matchSix) {
-        return (double) ((matchThree * 5000) + (matchFour * 50000) + (matchFive * 1500000) + (matchSix * 2000000000)) / money;
-    }
-
 }
