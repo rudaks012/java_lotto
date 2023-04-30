@@ -46,7 +46,7 @@ public class SuperLotto {
 
     private static List<List<Integer>> generateLottos(int lottoCount, LottoGenerator generator) {
         return IntStream.range(0, lottoCount)
-                        .mapToObj(i -> generator.generateLotto())
+                        .mapToObj(i -> generator.generateLottoTicket())
                         .collect(Collectors.toList());
     }
 }

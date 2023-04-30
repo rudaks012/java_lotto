@@ -7,7 +7,7 @@ import java.util.List;
 public class DefaultLottoGenerator implements LottoGenerator {
 
     @Override
-    public List<Integer> generateLotto() {
+    public List<Integer> generateLottoTicket() {
         List<Integer> preparedLottoNumbers = new ArrayList<>();
 
         for (int i = 1; i <= 45; i++) {
