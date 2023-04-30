@@ -40,6 +40,7 @@ public class SuperLotto {
             int matchCount = matcher.getMatchingCount(lastLottoNumbers, lotto);
             statistics.incrementMatchCount(matchCount);
         }
+
         return statistics;
     }
 
