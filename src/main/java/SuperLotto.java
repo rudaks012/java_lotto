@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import view.LottoResultPrinter;
 import view.UserInput;
 
@@ -43,12 +44,8 @@ public class SuperLotto {
     }
 
     private static List<List<Integer>> generateLottos(int lottoCount, LottoGenerator generator) {
-        List<List<Integer>> lottos = new ArrayList<>();
-        for (int i = 0; i < lottoCount; i++) {
-            List<Integer> lotto = generator.generateLotto();
-            lottos.add(lotto);
-        }
-        return lottos;
+        return IntStream.range(0, lottoCount)
+                        .mapToObj(i -> generator.generateLotto())
+                        .collect(Collectors.toList());
     }
-
 }
