@@ -1,8 +1,10 @@
 package domain;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LottoTicket {
+
     private final List<LottoNumber> lottoNumbers;
 
     public LottoTicket(List<LottoNumber> lottoNumbers) {
@@ -22,5 +24,11 @@ public class LottoTicket {
 
     public boolean contains(LottoNumber lottoNumber) {
         return lottoNumbers.contains(lottoNumber);
+    }
+
+    @Override
+    public String toString() {
+        return numbers().stream().map(String::valueOf)
+            .collect(Collectors.joining(", "));
     }
 }
