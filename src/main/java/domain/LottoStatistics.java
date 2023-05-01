@@ -1,46 +1,35 @@
 package domain;
 
+import java.util.List;
+
 public class LottoStatistics {
 
-    private int matchThree;
-    private int matchFour;
-    private int matchFive;
-    private int matchSix;
+    private final List<LottoTicket> lottos;
+    private final Winner winner;
 
-    public void incrementMatchCount(int matchCount) {
-        switch (matchCount) {
-            case 3:
-                matchThree++;
-                break;
-            case 4:
-                matchFour++;
-                break;
-            case 5:
-                matchFive++;
-                break;
-            case 6:
-                matchSix++;
-                break;
-        }
+    public LottoStatistics(List<LottoTicket> lottos, Winner winner) {
+        this.lottos = lottos;
+        this.winner = winner;
+    }
+
+    public void displayResult() {
+        System.out.println("당첨 통계");
+        System.out.println("---------");
+        System.out.println("3개 일치 (5000원) - " + countMatch(3) + "개");
+        System.out.println("4개 일치 (50000원) - " + countMatch(4) + "개");
+        System.out.println("5개 일치 (1500000원) - " + countMatch(5) + "개");
+        System.out.println("6개 일치 (2000000000원) - " + countMatch(6) + "개");
     }
 
     public double calculateProfitRate(int money) {
-        return (double) ((matchThree * 5000) + (matchFour * 50000) + (matchFive * 1500000) + (matchSix * 2000000000)) / money;
+        return (countMatch(3) * 5000 + countMatch(4) * 50000 + countMatch(5) * 1500000 + countMatch(6) * 2000000000) / (double) money;
     }
 
-    public int getMatchThree() {
-        return matchThree;
-    }
 
-    public int getMatchFour() {
-        return matchFour;
-    }
-
-    public int getMatchFive() {
-        return matchFive;
-    }
-
-    public int getMatchSix() {
-        return matchSix;
+    private long countMatch(int count) {
+        return lottos.stream()
+                     .mapToInt(ticket -> LottoMatcher.matchCount(ticket, winner.getWinnerTicket()))
+                     .filter(matches -> matches == count)
+                     .count();
     }
 }

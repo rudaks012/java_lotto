@@ -2,6 +2,10 @@ import domain.DefaultLottoGenerator;
 import domain.LottoGenerator;
 import domain.LottoMatcher;
 import domain.LottoStatistics;
+import domain.LottoTicket;
+import domain.LottoTicketParser;
+import domain.PurchaseAmount;
+import domain.Winner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,37 +20,26 @@ public class SuperLotto {
 
     public static void main(String[] args) {
         UserInput userInput = new UserInput();
+        PurchaseAmount amount = new PurchaseAmount(userInput.readPurchaseAmount());
 
-        int money = userInput.readPurchaseAmount();
-        int lottoCount = money / 1000;
+        int lottoCount = amount.calculateLottoTicketCount();
 
         System.out.println(lottoCount + "개를 구매");
-        List<List<Integer>> lottos = generateLottos(lottoCount, new DefaultLottoGenerator());
+        LottoGenerator generator = new DefaultLottoGenerator();
+        List<LottoTicket> lottos = IntStream.range(0, lottoCount)
+                                            .mapToObj(i -> generator.generateLottoTicket())
+                                            .collect(Collectors.toList());
 
         System.out.println("lottos = " + lottos);
-        List<Integer> lastWeekLottoNumber = userInput.readLastWeekLottoNumbers();
+        String lastWeekLottoNumberInput = userInput.readLastWeekLottoNumbers();
+        LottoTicket lastWeekLottoTicket = LottoTicketParser.parse(lastWeekLottoNumberInput);
 
-        LottoStatistics statistics = calculateLottoStatistics(lottos, lastWeekLottoNumber);
+        Winner winner = new Winner(lastWeekLottoTicket);
 
-        LottoResultPrinter.printLottoStatistics(statistics, money);
+        LottoStatistics statistics = new LottoStatistics(lottos, winner);
+        statistics.displayResult();
 
-    }
-
-    private static LottoStatistics calculateLottoStatistics(List<List<Integer>> lottos, List<Integer> lastLottoNumbers) {
-        LottoStatistics statistics = new LottoStatistics();
-        LottoMatcher matcher = new LottoMatcher();
-
-        for (List<Integer> lotto : lottos) {
-            int matchCount = matcher.getMatchingCount(lastLottoNumbers, lotto);
-            statistics.incrementMatchCount(matchCount);
-        }
-
-        return statistics;
-    }
-
-    private static List<List<Integer>> generateLottos(int lottoCount, LottoGenerator generator) {
-        return IntStream.range(0, lottoCount)
-                        .mapToObj(i -> generator.generateLottoTicket())
-                        .collect(Collectors.toList());
+        double profitRate = statistics.calculateProfitRate(amount.getValue());
+        System.out.printf("총 수익률은 %.2f입니다.", profitRate);
     }
 }

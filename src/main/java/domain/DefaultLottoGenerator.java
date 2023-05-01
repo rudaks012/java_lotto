@@ -1,19 +1,22 @@
 package domain;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class DefaultLottoGenerator implements LottoGenerator {
 
     @Override
-    public List<Integer> generateLottoTicket() {
-        List<Integer> preparedLottoNumbers = new ArrayList<>();
-
-        for (int i = 1; i <= 45; i++) {
-            preparedLottoNumbers.add(i);
-        }
+    public LottoTicket generateLottoTicket() {
+        List<LottoNumber> preparedLottoNumbers = prepareLottoNumbers();
         Collections.shuffle(preparedLottoNumbers);
-        return preparedLottoNumbers.subList(0, 6);
+        return LottoTicket.of(preparedLottoNumbers.subList(0, 6));
+    }
+
+    private List<LottoNumber> prepareLottoNumbers() {
+        return IntStream.rangeClosed(1, 45)
+                        .mapToObj(LottoNumber::of)
+                        .collect(Collectors.toList());
     }
 }
